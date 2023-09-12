@@ -1,1 +1,1 @@
-# rescript-cli
+# ⚙️ CLI app helper for ReScript

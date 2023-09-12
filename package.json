@@ -1,0 +1,49 @@
+{
+  "name": "rescript-cli",
+  "version": "1.0.0",
+  "description": "⚙️ CLI app helper for ReScript",
+  "homepage": "https://github.com/DZakh/rescript-cli#readme",
+  "keywords": [
+    "ReScript",
+    "Cli",
+    "Args",
+    "Commander",
+    "Yargs",
+    "Minimist"
+  ],
+  "bugs": {
+    "url": "https://github.com/DZakh/rescript-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DZakh/rescript-cli.git"
+  },
+  "license": "MIT",
+  "author": "Dmitry Zakharov <dzakh.dev@gmail.com>",
+  "main": "index.js",
+  "files": [
+    "src/**/*.res",
+    "src/**/*.resi",
+    "bsconfig.json"
+  ],
+  "scripts": {
+    "res:build": "rescript build",
+    "res": "rescript build -w",
+    "test": "ava"
+  },
+  "ava": {
+    "files": [
+      "__tests__/**/*_test.bs.js"
+    ]
+  },
+  "devDependencies": {
+    "@dzakh/rescript-ava": "2.3.0",
+    "ava": "5.2.0",
+    "rescript": "11.0.0-rc.3",
+    "rescript-struct": "5.0.1"
+  },
+  "peerDependencies": {
+    "rescript": "11.0.x || ~11.0.0-rc",
+    "rescript-struct": "5.0.x"
+  }
+}
