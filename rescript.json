@@ -2,8 +2,6 @@
   "name": "rescript-cli",
   "namespace": true,
   "bs-dev-dependencies": ["@dzakh/rescript-ava"],
-  "bs-dependencies": ["rescript-struct"],
-  "bsc-flags": ["-open RescriptStruct"],
   "suffix": ".bs.js",
   "package-specs": {
     "module": "commonjs",
