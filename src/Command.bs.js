@@ -29,15 +29,21 @@ function program(definer) {
 
 function parse(program, maybeArgs) {
   var args = maybeArgs !== undefined ? maybeArgs : Process.argv.slice(2);
-  var argsString = args.join(" ");
   var matchingCommandRef;
   for(var idx = 0 ,idx_finish = program.commandStrings.length; idx < idx_finish; ++idx){
     var commandString = program.commandStrings[idx];
     var command = program.commands[commandString];
-    if (argsString === command.string || argsString.startsWith(command.string + " ")) {
-      var matchingCommand = matchingCommandRef;
-      if (!(matchingCommand !== undefined && matchingCommand.string.length > command.string.length)) {
-        matchingCommandRef = command;
+    var partsLength = command.parts.length;
+    if (args.length >= partsLength) {
+      var isMatching = command.parts.every(function (part, index) {
+            return part === args[index];
+          });
+      if (isMatching) {
+        var matchingCommand = matchingCommandRef;
+        if (!(matchingCommand !== undefined && matchingCommand.parts.length > partsLength)) {
+          matchingCommandRef = command;
+        }
+        
       }
       
     }

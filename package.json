@@ -1,7 +1,7 @@
 {
   "name": "rescript-cli",
-  "version": "1.0.0",
-  "description": "⚙️ CLI app helper for ReScript",
+  "version": "0.1.0",
+  "description": "⚙️ Tools to work with CLI in ReScript",
   "homepage": "https://github.com/DZakh/rescript-cli#readme",
   "keywords": [
     "ReScript",

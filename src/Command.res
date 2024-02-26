@@ -4,30 +4,6 @@ module NodeJs = {
   }
 }
 
-module Set = {
-  type t<'value>
-
-  @new
-  external empty: unit => t<'value> = "Set"
-
-  @send
-  external has: (t<'value>, 'value) => bool = "has"
-
-  @send
-  external add: (t<'value>, 'value) => t<'value> = "add"
-
-  @new
-  external fromArray: array<'value> => t<'value> = "Set"
-
-  @val("Array.from")
-  external toArray: t<'value> => array<'value> = "from"
-}
-
-module Minimist = {
-  @module("minimist")
-  external parseArgs: (array<string>, unit) => Js.Json.t = "default"
-}
-
 type command<'tag> = {string: string, parts: array<string>, tag: 'tag}
 
 type program<'tag> = {commands: Js.Dict.t<command<'tag>>, commandStrings: array<string>}
@@ -69,18 +45,20 @@ let parse = (program: program<'command>, ~args as maybeArgs=?) => {
   | None => NodeJs.Process.argv->Js.Array2.sliceFrom(2)
   }
 
-  let argsLength = args->Js.Array2.length
-  let argsString = args->Js.Array2.joinWith(" ")
-
   let matchingCommandRef = ref(None)
   for idx in 0 to program.commandStrings->Array.length - 1 {
     let commandString = program.commandStrings->Js.Array2.unsafe_get(idx)
     let command = program.commands->Js.Dict.unsafeGet(commandString)
-    if argsString === command.string || argsString->Js.String2.startsWith(command.string ++ " ") {
-      switch matchingCommandRef.contents {
-      | Some(matchingCommand)
-        if matchingCommand.string->Js.String2.length > command.string->Js.String2.length => ()
-      | _ => matchingCommandRef.contents = Some(command)
+    let partsLength = command.parts->Js.Array2.length
+    if args->Js.Array2.length >= partsLength {
+      let isMatching =
+        command.parts->Js.Array2.everyi((part, index) => part === args->Js.Array2.unsafe_get(index))
+      if isMatching {
+        switch matchingCommandRef.contents {
+        | Some(matchingCommand) if matchingCommand.parts->Js.Array2.length > partsLength => ()
+        // TODO: Support equal lenght
+        | _ => matchingCommandRef.contents = Some(command)
+        }
       }
     }
   }

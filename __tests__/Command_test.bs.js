@@ -4,20 +4,31 @@
 var Ava = require("ava").default;
 var Command$RescriptCli = require("../src/Command.bs.js");
 
-Ava("Tmp", (function (t) {
+Ava("Api", (function (t) {
         var program = Command$RescriptCli.program(function (ctx) {
-              ctx.register("", "Help");
+              ctx.register("", "Root");
               ctx.register("help", "Help");
               ctx.register("help lint", "HelpLint");
               ctx.register("lint", "Lint");
             });
+        t.deepEqual(Command$RescriptCli.parse(program, []), {
+              TAG: "Ok",
+              _0: [
+                {
+                  string: "",
+                  parts: [],
+                  tag: "Root"
+                },
+                []
+              ]
+            }, undefined);
         t.deepEqual(Command$RescriptCli.parse(program, [""]), {
               TAG: "Ok",
               _0: [
                 {
                   string: "",
                   parts: [],
-                  tag: "Help"
+                  tag: "Root"
                 },
                 [""]
               ]
@@ -44,7 +55,10 @@ Ava("Tmp", (function (t) {
                 []
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, ["help lint"]), {
+        t.deepEqual(Command$RescriptCli.parse(program, [
+                  "help",
+                  "lint"
+                ]), {
               TAG: "Ok",
               _0: [
                 {
@@ -58,7 +72,21 @@ Ava("Tmp", (function (t) {
                 []
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, ["lint help"]), {
+        t.deepEqual(Command$RescriptCli.parse(program, ["help lint"]), {
+              TAG: "Ok",
+              _0: [
+                {
+                  string: "",
+                  parts: [],
+                  tag: "Root"
+                },
+                ["help lint"]
+              ]
+            }, undefined);
+        t.deepEqual(Command$RescriptCli.parse(program, [
+                  "lint",
+                  "help"
+                ]), {
               TAG: "Ok",
               _0: [
                 {
@@ -66,12 +94,19 @@ Ava("Tmp", (function (t) {
                   parts: ["lint"],
                   tag: "Lint"
                 },
-                []
+                ["help"]
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, ["lins help"]), {
-              TAG: "Error",
-              _0: undefined
+        t.deepEqual(Command$RescriptCli.parse(program, ["lint help"]), {
+              TAG: "Ok",
+              _0: [
+                {
+                  string: "",
+                  parts: [],
+                  tag: "Root"
+                },
+                ["lint help"]
+              ]
             }, undefined);
       }));
 
