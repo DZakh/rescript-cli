@@ -23,14 +23,14 @@ Then add `rescript-cli` to `bs-dependencies` in your `rescript.json`:
 ## `Command`
 
 ```rescript
-let program = Command.program(ctx => {
+let program = RescriptCli.Command.program(ctx => {
   ctx.register("version", #version)
   ctx.register("help", #help)
   ctx.register("help build", #helpBuild)
   ctx.register("build", #build)
 })
 
-switch program->Command.parse {
+switch program->RescriptCli.Command.parse {
 | Ok({tag: #build}, args) => App.build(~args)
 | Ok({tag: #version}, _) => Console.log("1.0.0")
 | Ok({tag: #help}, _)
