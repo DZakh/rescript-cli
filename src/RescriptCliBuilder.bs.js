@@ -4,11 +4,11 @@
 var Js_exn = require("rescript/lib/js/js_exn.js");
 var Process = require("process");
 
-function program(definer) {
+function make(definer) {
   var commands = {};
   var commandStrings = [];
   definer({
-        register: (function (string, tag) {
+        command: (function (string, tag) {
             if (commands[string] !== (void 0)) {
               Js_exn.raiseError("Command \"" + string + "\" is already registered.");
             }
@@ -27,12 +27,15 @@ function program(definer) {
         };
 }
 
-function parse(program, maybeArgs) {
-  var args = maybeArgs !== undefined ? maybeArgs : Process.argv.slice(2);
+function getProcessArgs() {
+  return Process.argv.slice(2);
+}
+
+function parse(builder, args) {
   var matchingCommandRef;
-  for(var idx = 0 ,idx_finish = program.commandStrings.length; idx < idx_finish; ++idx){
-    var commandString = program.commandStrings[idx];
-    var command = program.commands[commandString];
+  for(var idx = 0 ,idx_finish = builder.commandStrings.length; idx < idx_finish; ++idx){
+    var commandString = builder.commandStrings[idx];
+    var command = builder.commands[commandString];
     var partsLength = command.parts.length;
     if (args.length >= partsLength) {
       var isMatching = command.parts.every(function (part, index) {
@@ -66,6 +69,7 @@ function parse(program, maybeArgs) {
   }
 }
 
-exports.program = program;
+exports.make = make;
+exports.getProcessArgs = getProcessArgs;
 exports.parse = parse;
 /* process Not a pure module */

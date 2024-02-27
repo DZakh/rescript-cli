@@ -8,29 +8,29 @@ Provides following modules under the `RescriptCli` namespace:
 ## Install
 
 ```sh
-npm install rescript-cli
+npm install rescript-cli-builder
 ```
 
-Then add `rescript-cli` to `bs-dependencies` in your `rescript.json`:
+Then add `rescript-cli-builder` to `bs-dependencies` in your `rescript.json`:
 
 ```diff
 {
   ...
-+ "bs-dependencies": ["rescript-cli"],
++ "bs-dependencies": ["rescript-cli-builder"],
 }
 ```
 
 ## `Command`
 
 ```rescript
-let program = RescriptCli.Command.program(ctx => {
-  ctx.register("version", #version)
-  ctx.register("help", #help)
-  ctx.register("help build", #helpBuild)
-  ctx.register("build", #build)
+let builder = RescriptCliBuilder.make(ctx => {
+  ctx.command("version", #version)
+  ctx.command("help", #help)
+  ctx.command("help build", #helpBuild)
+  ctx.command("build", #build)
 })
 
-switch program->RescriptCli.Command.parse {
+switch builder->RescriptCliBuilder.parse(RescriptCliBuilder.getProcessArgs()) {
 | Ok({tag: #build}, args) => App.build(~args)
 | Ok({tag: #version}, _) => Console.log("1.0.0")
 | Ok({tag: #help}, _)

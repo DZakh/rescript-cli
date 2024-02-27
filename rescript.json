@@ -1,6 +1,6 @@
 {
-  "name": "rescript-cli",
-  "namespace": true,
+  "name": "rescript-cli-builder",
+  "namespace": false,
   "bs-dev-dependencies": ["@dzakh/rescript-ava"],
   "suffix": ".bs.js",
   "package-specs": {

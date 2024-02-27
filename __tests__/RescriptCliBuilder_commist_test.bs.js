@@ -2,13 +2,13 @@
 'use strict';
 
 var Ava = require("ava").default;
-var Command$RescriptCli = require("../src/Command.bs.js");
+var RescriptCliBuilder = require("../src/RescriptCliBuilder.bs.js");
 
 Ava("registering a command", (function (t) {
-        var program = Command$RescriptCli.program(function (ctx) {
-              ctx.register("hello", "Hello");
+        var builder = RescriptCliBuilder.make(function (ctx) {
+              ctx.command("hello", "Hello");
             });
-        t.deepEqual(Command$RescriptCli.parse(program, [
+        t.deepEqual(RescriptCliBuilder.parse(builder, [
                   "hello",
                   "a",
                   "-x",
@@ -31,11 +31,11 @@ Ava("registering a command", (function (t) {
       }));
 
 Ava("registering two commands", (function (t) {
-        var program = Command$RescriptCli.program(function (ctx) {
-              ctx.register("hello", "Hello");
-              ctx.register("world", "World");
+        var builder = RescriptCliBuilder.make(function (ctx) {
+              ctx.command("hello", "Hello");
+              ctx.command("world", "World");
             });
-        t.deepEqual(Command$RescriptCli.parse(program, [
+        t.deepEqual(RescriptCliBuilder.parse(builder, [
                   "world",
                   "a",
                   "-x",
@@ -58,11 +58,11 @@ Ava("registering two commands", (function (t) {
       }));
 
 Ava("registering two commands (bis)", (function (t) {
-        var program = Command$RescriptCli.program(function (ctx) {
-              ctx.register("hello", "Hello");
-              ctx.register("world", "World");
+        var builder = RescriptCliBuilder.make(function (ctx) {
+              ctx.command("hello", "Hello");
+              ctx.command("world", "World");
             });
-        t.deepEqual(Command$RescriptCli.parse(program, [
+        t.deepEqual(RescriptCliBuilder.parse(builder, [
                   "hello",
                   "a",
                   "-x",
@@ -85,11 +85,11 @@ Ava("registering two commands (bis)", (function (t) {
       }));
 
 Ava("registering two words commands", (function (t) {
-        var program = Command$RescriptCli.program(function (ctx) {
-              ctx.register("hello", "Hello");
-              ctx.register("hello world", "HelloWorld");
+        var builder = RescriptCliBuilder.make(function (ctx) {
+              ctx.command("hello", "Hello");
+              ctx.command("hello world", "HelloWorld");
             });
-        t.deepEqual(Command$RescriptCli.parse(program, [
+        t.deepEqual(RescriptCliBuilder.parse(builder, [
                   "hello",
                   "world",
                   "a",
@@ -116,11 +116,11 @@ Ava("registering two words commands", (function (t) {
       }));
 
 Ava("registering two words commands (bis)", (function (t) {
-        var program = Command$RescriptCli.program(function (ctx) {
-              ctx.register("hello", "Hello");
-              ctx.register("hello world", "HelloWorld");
+        var builder = RescriptCliBuilder.make(function (ctx) {
+              ctx.command("hello", "Hello");
+              ctx.command("hello world", "HelloWorld");
             });
-        t.deepEqual(Command$RescriptCli.parse(program, [
+        t.deepEqual(RescriptCliBuilder.parse(builder, [
                   "hello",
                   "a",
                   "-x",
@@ -144,11 +144,11 @@ Ava("registering two words commands (bis)", (function (t) {
 
 Ava("registering ambiguous commands throws exception", (function (t) {
         t.throws((function () {
-                Command$RescriptCli.program(function (ctx) {
-                      ctx.register("hello", "Hello");
-                      ctx.register("hello world", "HelloWorld");
-                      ctx.register("hello world matteo", "HelloWorldMatteo");
-                      ctx.register("hello world", "HelloWorld");
+                RescriptCliBuilder.make(function (ctx) {
+                      ctx.command("hello", "Hello");
+                      ctx.command("hello world", "HelloWorld");
+                      ctx.command("hello world matteo", "HelloWorldMatteo");
+                      ctx.command("hello world", "HelloWorld");
                     });
               }), {
               message: "Command \"hello world\" is already registered."

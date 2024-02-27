@@ -6,15 +6,15 @@ module NodeJs = {
 
 type command<'tag> = {string: string, parts: array<string>, tag: 'tag}
 
-type program<'tag> = {commands: Js.Dict.t<command<'tag>>, commandStrings: array<string>}
+type t<'tag> = {commands: Js.Dict.t<command<'tag>>, commandStrings: array<string>}
 
-type ctx<'tag> = {register: (string, 'tag) => unit}
+type ctx<'tag> = {command: (string, 'tag) => unit}
 
-let program = (definer: ctx<'tag> => unit): program<'tag> => {
+let make = (definer: ctx<'tag> => unit): t<'tag> => {
   let commands = Js.Dict.empty()
   let commandStrings = []
   definer({
-    register: (string, tag) => {
+    command: (string, tag) => {
       if commands->Js.Dict.unsafeGet(string) !== %raw(`void 0`) {
         Js.Exn.raiseError(`Command "${string}" is already registered.`)
       }
@@ -38,17 +38,16 @@ let program = (definer: ctx<'tag> => unit): program<'tag> => {
   }
 }
 
-let parse = (program: program<'command>, ~args as maybeArgs=?) => {
-  let args = switch maybeArgs {
-  | Some(args) => args
+let getProcessArgs = () => {
   // TODO: Support electron out of the box
-  | None => NodeJs.Process.argv->Js.Array2.sliceFrom(2)
-  }
+  NodeJs.Process.argv->Js.Array2.sliceFrom(2)
+}
 
+let parse = (builder: t<'command>, args) => {
   let matchingCommandRef = ref(None)
-  for idx in 0 to program.commandStrings->Array.length - 1 {
-    let commandString = program.commandStrings->Js.Array2.unsafe_get(idx)
-    let command = program.commands->Js.Dict.unsafeGet(commandString)
+  for idx in 0 to builder.commandStrings->Array.length - 1 {
+    let commandString = builder.commandStrings->Js.Array2.unsafe_get(idx)
+    let command = builder.commands->Js.Dict.unsafeGet(commandString)
     let partsLength = command.parts->Js.Array2.length
     if args->Js.Array2.length >= partsLength {
       let isMatching =

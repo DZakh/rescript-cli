@@ -2,16 +2,16 @@
 'use strict';
 
 var Ava = require("ava").default;
-var Command$RescriptCli = require("../src/Command.bs.js");
+var RescriptCliBuilder = require("../src/RescriptCliBuilder.bs.js");
 
 Ava("Api", (function (t) {
-        var program = Command$RescriptCli.program(function (ctx) {
-              ctx.register("", "Root");
-              ctx.register("help", "Help");
-              ctx.register("help lint", "HelpLint");
-              ctx.register("lint", "Lint");
+        var builder = RescriptCliBuilder.make(function (ctx) {
+              ctx.command("", "Root");
+              ctx.command("help", "Help");
+              ctx.command("help lint", "HelpLint");
+              ctx.command("lint", "Lint");
             });
-        t.deepEqual(Command$RescriptCli.parse(program, []), {
+        t.deepEqual(RescriptCliBuilder.parse(builder, []), {
               TAG: "Ok",
               _0: [
                 {
@@ -22,7 +22,7 @@ Ava("Api", (function (t) {
                 []
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, [""]), {
+        t.deepEqual(RescriptCliBuilder.parse(builder, [""]), {
               TAG: "Ok",
               _0: [
                 {
@@ -33,7 +33,7 @@ Ava("Api", (function (t) {
                 [""]
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, ["help"]), {
+        t.deepEqual(RescriptCliBuilder.parse(builder, ["help"]), {
               TAG: "Ok",
               _0: [
                 {
@@ -44,7 +44,7 @@ Ava("Api", (function (t) {
                 []
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, ["lint"]), {
+        t.deepEqual(RescriptCliBuilder.parse(builder, ["lint"]), {
               TAG: "Ok",
               _0: [
                 {
@@ -55,7 +55,7 @@ Ava("Api", (function (t) {
                 []
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, [
+        t.deepEqual(RescriptCliBuilder.parse(builder, [
                   "help",
                   "lint"
                 ]), {
@@ -72,7 +72,7 @@ Ava("Api", (function (t) {
                 []
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, ["help lint"]), {
+        t.deepEqual(RescriptCliBuilder.parse(builder, ["help lint"]), {
               TAG: "Ok",
               _0: [
                 {
@@ -83,7 +83,7 @@ Ava("Api", (function (t) {
                 ["help lint"]
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, [
+        t.deepEqual(RescriptCliBuilder.parse(builder, [
                   "lint",
                   "help"
                 ]), {
@@ -97,7 +97,7 @@ Ava("Api", (function (t) {
                 ["help"]
               ]
             }, undefined);
-        t.deepEqual(Command$RescriptCli.parse(program, ["lint help"]), {
+        t.deepEqual(RescriptCliBuilder.parse(builder, ["lint help"]), {
               TAG: "Ok",
               _0: [
                 {

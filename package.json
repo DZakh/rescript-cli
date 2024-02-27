@@ -1,8 +1,8 @@
 {
-  "name": "rescript-cli",
+  "name": "rescript-cli-builder",
   "version": "0.1.0",
   "description": "⚙️ Tools to work with CLI in ReScript",
-  "homepage": "https://github.com/DZakh/rescript-cli#readme",
+  "homepage": "https://github.com/DZakh/rescript-cli-builder#readme",
   "keywords": [
     "ReScript",
     "Cli",
@@ -12,11 +12,11 @@
     "Minimist"
   ],
   "bugs": {
-    "url": "https://github.com/DZakh/rescript-cli/issues"
+    "url": "https://github.com/DZakh/rescript-cli-builder/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DZakh/rescript-cli.git"
+    "url": "git+https://github.com/DZakh/rescript-cli-builder.git"
   },
   "license": "MIT",
   "author": "Dmitry Zakharov <dzakh.dev@gmail.com>",

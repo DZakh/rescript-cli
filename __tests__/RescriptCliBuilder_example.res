@@ -6,14 +6,14 @@ module Console = {
   let log = _ => ()
 }
 
-let program = Command.program(ctx => {
-  ctx.register("version", #version)
-  ctx.register("help", #help)
-  ctx.register("help build", #helpBuild)
-  ctx.register("build", #build)
+let builder = RescriptCliBuilder.make(ctx => {
+  ctx.command("version", #version)
+  ctx.command("help", #help)
+  ctx.command("help build", #helpBuild)
+  ctx.command("build", #build)
 })
 
-switch program->Command.parse {
+switch builder->RescriptCliBuilder.parse(RescriptCliBuilder.getProcessArgs()) {
 | Ok({tag: #build}, args) => App.build(~args)
 | Ok({tag: #version}, _) => Console.log("1.0.0")
 | Ok({tag: #help}, _)
